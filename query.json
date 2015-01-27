@@ -1,0 +1,34 @@
+{
+  "request": {
+    "passengers": {
+      "adultCount": 1,
+      "childCount": 1
+    },
+    "slice": [
+      {
+        "origin": "OGG",
+        "destination": "NCE",
+        "date": "2015-09-19",
+        "permittedDepartureTime":
+        {
+          "kind": "qpxexpress#timeOfDayRange",
+          "earliestTime": "22:00",
+          "latestTime": "23:00"
+        }
+      },
+      {
+        "origin": "NCE",
+        "destination": "OGG",
+        "date": "2015-09-28",
+        "permittedDepartureTime":
+        {
+          "kind": "qpxexpress#timeOfDayRange",
+          "earliestTime": "05:00",
+          "latestTime": "12:00"
+        }
+      }
+    ],
+    "maxPrice": "USD5400",
+    "solutions": 500
+  }
+}
