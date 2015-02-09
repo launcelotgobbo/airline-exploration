@@ -7,10 +7,11 @@ use Exporter;
 use Time::HiRes qw(time);
 use POSIX qw(strftime);
 use Keys;
+use DateTime::Format::ISO8601;
 
 our @ISA = qw(Exporter);
 
-our @EXPORT = qw(mainScript);
+our @EXPORT = qw(mainScript parseFileName formatNonIsoDate);
 
 our @EXPORT_OK = @EXPORT;
 
@@ -86,5 +87,43 @@ sub mainScript {
 				copyConfigFile($ii, $jj);
 			}
 		}
+	}
+}
+
+sub parseFileName {
+	if (scalar(@_) == 1) {
+		my %retVal;
+
+		my @dirHierarcy = split('/', $_[0]);
+		my @fileName = split('_', $dirHierarcy[-1]);
+
+		my $origin = $fileName[1];
+		my $destination = $fileName[2];
+
+		my $recordTime = $fileName[-1];
+		$recordTime =~ s/\.json//g;
+		$recordTime =~ s/([0-9][0-9])([0-9][0-9])([0-9][0-9])/$1:$2:$3/;
+
+		my $recordDate = $fileName[3];
+		$recordDate =~ s/([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])/$1-$2-$3/;
+
+		my $timeRecord = $recordDate . 'T' . $recordTime;
+		my $iso8601 = DateTime::Format::ISO8601->new;
+
+		$retVal{'origin'} = $origin;
+		$retVal{'destination'} = $destination;
+		$retVal{'recordTime'} = $iso8601->parse_datetime($timeRecord);
+		$retVal{'recordDate'} = $recordDate;
+
+		return %retVal;
+	}
+}
+
+sub formatNonIsoDate {
+	if (scalar(@_) == 1) {
+		my $iso8601 = DateTime::Format::ISO8601->new;
+		my $time = $_[0];
+		$time =~ s/(...:..$)/:00.00$1/;
+		return $iso8601->parse_datetime($time);
 	}
 }
