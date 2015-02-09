@@ -11,7 +11,7 @@ use Constants qw(parseFileName);
 
 my $errorLogFile = '/Users/rarora/data/qpx/perl/error.txt';
 my $parentDirectory = '/Users/rarora/data/qpx/perl/';
-my @fileFolders = `ls $parentDirectory | grep 20150208`;
+my @fileFolders = `ls $parentDirectory | grep 2012`;
 my $parseFileLocation = '/Users/rarora/data/qpx/perl/csv/';
 
 foreach my $currFolder(@fileFolders) {
@@ -37,6 +37,3 @@ foreach my $currFolder(@fileFolders) {
 		closedir(DIR);
 	}
 }
-
-# processFile($processFile, $errorLogFile, '');
-# my $processFile = $parentDirectory . $currFileName;

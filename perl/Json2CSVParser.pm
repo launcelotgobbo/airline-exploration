@@ -12,6 +12,8 @@ use File::Slurp;
 use Data::Dumper;
 use Test::Simple tests=>1;
 use File::Spec;
+use DateTime;
+use DateTime::Format::ISO8601;
 
 our @ISA = qw(Exporter);
 our @EXPORT = qw(processFile);
@@ -40,7 +42,7 @@ sub processFile {
 
 
 sub parseJsonFile {
-	my $header = "origin,destination,recordtime,price,duration,legs,flightName,seats\n";
+	my $header = "origin,destination,recordtime,price,duration,legs,flightName,seats,departureTime,arrivalTime\n";
 	my $fileName = $_[0];
 	my $outputFile = $_[1];
 
@@ -84,7 +86,8 @@ sub parseJsonFile {
 						push @departureTime, formatNonIsoDate($leg->{'departureTime'});
 					}
 				}
-				$eachLine .= (join(" ", @carrierNames) . "," . min @carrierSeatCount);
+				$eachLine .= (join(" ", @carrierNames) . "," . min @carrierSeatCount) . ",";
+				$eachLine .= $departureTime[0] . "," . $arrivalTime[-1];
 				$eachLine .= "\n";
 			}
 			
