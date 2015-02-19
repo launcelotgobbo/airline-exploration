@@ -7,7 +7,7 @@ use Exporter;
 use Time::HiRes qw(time);
 use POSIX qw(strftime);
 use Keys;
-use DateTime::Format::ISO8601;
+# use DateTime::Format::ISO8601;
 
 our @ISA = qw(Exporter);
 
@@ -15,7 +15,9 @@ our @EXPORT = qw(mainScript parseFileName formatNonIsoDate);
 
 our @EXPORT_OK = @EXPORT;
 
-my $baseDirectory = "/Users/rarora/Dropbox/airline/airline-exploration/perl";
+# my $baseDirectory = "/Users/rarora/Dropbox/airline/airline-exploration/perl";
+my $baseDirectory = "/home/ec2-user/airline-exploration/perl";
+my $saveDirectory = "/data/airline";
 
 sub say {print @_, "\n"}
 
@@ -28,7 +30,7 @@ sub configFile {
 sub parentFolder {
 	my $t = time;
 	my $date = strftime "%Y%m%d", gmtime $t;
-	my $parentDirectoryName = sprintf("%s/%s", $baseDirectory, $date);
+	my $parentDirectoryName = sprintf("%s/%s", $saveDirectory, $date);
 	if (! -d $parentDirectoryName) {
 		system ('mkdir', $parentDirectoryName);
 	}
@@ -87,8 +89,8 @@ sub mainScript {
 			if ($ii ne $jj) {
 				my $executeScript = executeScript($ii, $jj);
 				print $executeScript . "\n";
-				#system($executeScript);
-				#copyConfigFile($ii, $jj);
+				system($executeScript);
+				copyConfigFile($ii, $jj);
 			}
 		}
 	}
