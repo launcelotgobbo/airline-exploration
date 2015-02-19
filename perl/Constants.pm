@@ -52,10 +52,14 @@ sub executeScript {
 	if (scalar(@_) == 2) {
 		my $curlStatement = "curl -d @";
 		my $configFile = configFile($_[0], $_[1]);
-		my $tail = " --header \"Content-Type: application/json\" https://www.googleapis.com/qpxExpress/v1/trips/search?key";
-		my $api = apiKey();
-		my $outputFile = outputFileName($_[0], $_[1]);
-		return sprintf("%s%s %s=%s > %s", $curlStatement, $configFile, $tail, $api, $outputFile);
+		if (-e $configFile) {
+			my $tail = " --header \"Content-Type: application/json\" https://www.googleapis.com/qpxExpress/v1/trips/search?key";
+			my $api = apiKey();
+			my $outputFile = outputFileName($_[0], $_[1]);
+			return sprintf("%s%s %s=%s > %s", $curlStatement, $configFile, $tail, $api, $outputFile);
+		} else {
+			return sprintf("echo '%s doesnt exist'", $configFile);
+		}
 	}
 }
 
@@ -76,15 +80,15 @@ sub copyConfigFile {
 }
 
 sub mainScript {
-#	my @airports = ("NYC", "SFO", "LAX", "BOS", "MIA", "CHI", "LCY", "DEL", "TYO", "PAR", "PEK", "AUH");
-	my @airports = ("NYC", "SFO");
+	my @airports = ("NYC", "SFO", "LAX", "BOS", "MIA", "CHI", "LCY", "DEL", "TYO", "PAR", "PEK", "AUH");
+	#my @airports = ("NYC", "SFO");
 	foreach my $ii(@airports) {
 		foreach my $jj(@airports) {
 			if ($ii ne $jj) {
 				my $executeScript = executeScript($ii, $jj);
-				print $executeScript;
-				system($executeScript);
-				copyConfigFile($ii, $jj);
+				print $executeScript . "\n";
+				#system($executeScript);
+				#copyConfigFile($ii, $jj);
 			}
 		}
 	}
